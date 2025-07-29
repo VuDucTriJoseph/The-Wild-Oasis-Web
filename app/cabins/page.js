@@ -2,6 +2,12 @@ import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Spinner from "../_components/Spinner";
 
+// export const revalidate = 3600; // this "0" value cann't caculate, revalidate = 0  set 0 seconds
+
+export const metadata = {
+  title: "Cabins",
+};
+
 export default function Page() {
   // CHANGE
 
