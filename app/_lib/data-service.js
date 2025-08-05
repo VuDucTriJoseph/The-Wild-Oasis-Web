@@ -1,6 +1,7 @@
 import { eachDayOfInterval } from "date-fns";
 import { supabase } from "./supabase";
 import { notFound } from "next/navigation";
+import { countries as ctryData } from "@/app/_lib/countriesData";
 
 /////////////
 // GET
@@ -125,14 +126,20 @@ export async function getSettings() {
   return data;
 }
 
-export async function getCountries() {
+/* export async function getCountries() {
   try {
-    const res = await fetch("https://restcountries.com/v2/all?fields=name,flag");
+    const res = await fetch("https://restcountries.com/v2/all?fields=name,flag"); //it take too much time to respont and let the app crack
     const countries = await res.json();
+  
     return countries;
   } catch {
     throw new Error("Could not fetch countries");
   }
+}
+*/
+export function fakeGetCountries() {
+  const countriesData = ctryData;
+  return countriesData;
 }
 
 /////////////
