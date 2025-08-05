@@ -1,6 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
+import { supabase } from "./supabase";
 
 export async function signInAction() {
   await signIn("google", { redirectTo: "/account" });
@@ -11,6 +13,22 @@ export async function signOutAction() {
 }
 
 export async function updateProfile(formData) {
-  const authen = await auth();
-  console.log(authen);
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+  // console.log(formData);
+  const nationalID = formData.get("nationalID");
+  const [nationality, countryFlag] = formData.get("nationality").split("%");
+  if (!/^[A-Za-z0-9]{6,12}$/.test(nationalID))
+    throw new Error("Please provide a valid national ID.");
+  const updateData = { nationalID, nationality, countryFlag };
+  const { data, error } = await supabase
+    .from("guests")
+    .update(updateData)
+    .eq("id", session.user.guestID);
+
+  if (error) {
+    // console.error(error);
+    throw new Error("Guest could not be updated");
+  }
+  revalidatePath("account/profile");
 }
