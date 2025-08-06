@@ -1,10 +1,15 @@
-import Button from "@/app/_components/Button";
+import SubmitButton from "@/app/_components/SubmitButton";
 import { updateResservation } from "@/app/_lib/actions";
 import { getBooking, getCabin } from "@/app/_lib/data-service";
 
 export default async function Page({ params }) {
   // CHANGE
-  const { id: reservationId, cabinId } = await getBooking(params.bookingId);
+  const {
+    id: reservationId,
+    cabinId,
+    numGuests,
+    observations,
+  } = await getBooking(params.bookingId);
 
   const { maxCapacity } = await getCabin(cabinId);
   // console.log("booking: ", booking);
@@ -25,6 +30,7 @@ export default async function Page({ params }) {
         <div className="space-y-2">
           <label htmlFor="numGuests">How many guests?</label>
           <select
+            defaultValue={numGuests}
             name="numGuests"
             id="numGuests"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
@@ -44,13 +50,14 @@ export default async function Page({ params }) {
         <div className="space-y-2">
           <label htmlFor="observations">Anything we should know about your stay?</label>
           <textarea
+            defaultValue={observations}
             name="observations"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
           />
         </div>
 
         <div className="flex justify-end items-center gap-6">
-          <Button />
+          <SubmitButton pendingLabel="Updating...">Update reservation</SubmitButton>
         </div>
       </form>
     </div>

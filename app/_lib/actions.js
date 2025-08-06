@@ -35,8 +35,13 @@ export async function updateProfile(formData) {
   revalidatePath("account/profile");
 }
 
+// ////////
+
 export async function deleteReservation(bookingId) {
   // console.log("delete reservation");
+  // await new Promise((res) => setTimeout(res, 3000));
+  // throw new Error("test");
+
   const session = await auth();
   if (!session) throw new Error("Not authenticated");
 
@@ -56,8 +61,10 @@ export async function deleteReservation(bookingId) {
   revalidatePath("account/reservations");
 }
 
+// ////////
 export async function updateResservation(formData) {
   // console.log(formData);
+  await new Promise((res) => setTimeout(res, 3000));
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
 
@@ -84,7 +91,7 @@ export async function updateResservation(formData) {
     throw new Error("Reservation could not be updated");
   }
   revalidatePath("/account/reservations");
-  revalidatePath("/account/reservations/edit");
+  revalidatePath(`/account/reservations/edit/${bookingId}`);
 
   redirect("/account/reservations");
 }
